@@ -1,0 +1,19 @@
+//Gestion des redirections vers stdin et stdout avec ‘<’ et ‘>’ ;
+	//Gestion avec ">"
+		token=strtok(command,">");
+		if (token!=NULL){
+			filename=strtok(NULL, ">");
+			int descripteur=open(filename,O_CREAT|O_RDWR|O_CLOEXEC,S_IRWXG|S_IRWXU|S_IRWXO);//ouverture et accès au fichier en écriture et en lecture
+			dup2(descripteur,STDOUT_FILENO);
+			close(descripteur);
+		}
+	
+	//Gestion avec "<"
+		token=strtok(command,"<");
+		if (token!=NULL){
+			filename=strtok(NULL,"<");
+			int descripteur=open(filename,O_CREAT|O_RDWR); //ouverture du fichier
+			close(STDIN_FILENO);
+			dup2(descripteur,STDIN_FILENO);
+			close(descripteur);
+		}
